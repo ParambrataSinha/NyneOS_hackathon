@@ -16,8 +16,16 @@ This repository contains our team's Round 1 submission for the AI-driven GNSS Sp
 Recognizing the complexity of multi-level spoofing—from brute-force power overpowering to sophisticated "matched-phase" slow drifts—we took an iterative, multi-model approach. We began with strict, unsupervised physical heuristics and progressively advanced to a deep sequential sequence model to maximize our Weighted F1 Score and ensure hardware robustness.
 
 ---
+## 2. Dataset: Spatial GNSS Spoofing
 
-## 2. Our Iterative Approaches
+- 1.⁠ **⁠Data Sourcing:**<br>
+The raw baseband data originates from the publicly available Mendeley repository: A DATASET for GPS Spoofing Detection on Unmanned Aerial System. It consists of recordings from an 8-channel GPS receiver mounted on a drone during dynamic flights (0-60 mph), capturing both authentic satellite signals and active spoofing attacks.
+
+- 2.⁠ **⁠Transformation & Reshaping:**<br>
+The original repository distributed the data across three separate, 3D wide-matrix files. To make this data compatible with standard spatial machine learning models, we consolidated the files and applied a spatial flattening pipeline. We pivoted the 8 parallel hardware channels (ch0 through ch7) so that every individual row in the final CSV represents a single, frozen microsecond "snapshot" of the entire receiver state. Each snapshot is mapped to a binary target variable: 0 (Authentic Flight) or 1 (Spoofed Attack).
+---
+
+## 3. Our Iterative Approaches
 
 ### Approach 1: Physics-Informed Unsupervised Anomaly Detection (Isolation Forest)
 **Objective:** To detect spoofing using purely first-principle reasoning without relying on labeled training data.<br>
@@ -34,7 +42,7 @@ Performance validation relied on an external labeled database. Consequently, the
 
 > *Note: We utilized this model as our fundamental baseline, evaluating subsequent architectures against its performance.*
 
-#### Approach 2: Domain-Adversarial Neural Network (DANN) with 1D-ResNet
+### Approach 2: Domain-Adversarial Neural Network (DANN) with 1D-ResNet
 **Objective:** To solve the "Domain Gap" problem. Lab-trained models often fail in real-world deployments because different GNSS hardware receivers possess unique internal biases. This approach aimed to build a hardware-agnostic model capable of detecting complex time-series attacks on the unseen NyneOS test drone.
 
 **Methodology:** We engineered a robust Deep Learning pipeline that fused physical heuristics with Unsupervised Domain Adaptation (UDA) and Self-Supervised Learning.
@@ -66,10 +74,10 @@ Performance validation relied on an external labeled database. Consequently, the
 * **Validation F1 Score:** **0.9726**
 * **Conclusion:** This was the undisputed breakthrough of the project. By successfully mapping external channel-level data to our exact test-set domain and passing it through a high-capacity BiLSTM, we achieved an exceptional F1 score of >0.97. The Bidirectional nature of the network allowed it to look forward and backward across the time-series window, effortlessly distinguishing between clean physical noise and the subtle, unnatural feature distributions of a spoofing attack. 
 
-> *Note: This represents our final, definitive architecture for the Round 1 submission.*
+> *Note: This is currently our best-performing model, although the project still offers substantial opportunities for further research and optimization.*
 
 ---
-## 3. Model Comparison & Evaluation Metrics
+## 4. Model Comparison & Evaluation Metrics
 
 To track our progress and justify architectural pivots, we evaluated each model against F1 metrics. 
 
@@ -80,7 +88,7 @@ To track our progress and justify architectural pivots, we evaluated each model 
 | **Approach 3:** Deep BiLSTM *(Final)* | **0.9726** |
 
 ---
-## 6. Literature & Research Acknowledgment
+## 5. Literature & Research Acknowledgment
 
 Our feature engineering pipeline and architectural pivots were heavily guided by recent advancements in GNSS cybersecurity research. We specifically adapted methodologies from the following papers to build our defense system:
 
