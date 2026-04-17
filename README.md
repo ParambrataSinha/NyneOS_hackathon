@@ -1,4 +1,4 @@
-# 🛰️ GNSS Spoofing Detection: AI-Driven Defense Architecture
+# GNSS Spoofing Detection: AI-Driven Defense Architecture
 > **Technical General Championship 2026** <br>
 > **Problem Statement:** Generative AI powered by NyneOS <br>
 > **Team:** The Overfitters <br> 
